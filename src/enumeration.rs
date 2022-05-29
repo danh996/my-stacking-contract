@@ -14,7 +14,9 @@ pub struct PoolJson {
 
 impl StackingContract {
     pub fn get_account_info(&self, account_id: AccountId) -> AccountJson {
-        let account = self.accounts.get(&account_id).unwrap();
+        let upgradeable_account = self.accounts.get(&account_id).unwrap();
+
+        let account = Account::from(upgradeable_account);
 
         let new_reward = self.internal_calculate_account_reward(&account);
 
@@ -22,7 +24,9 @@ impl StackingContract {
     }
 
     pub fn get_account_reward(&self, account_id: AccountId) -> Balance {
-        let account = self.accounts.get(&account_id).unwrap();
+        let upgradeable_account = self.accounts.get(&account_id).unwrap();
+
+        let account = Account::from(upgradeable_account);
         let new_reward = self.internal_calculate_account_reward(&account);
         account.pre_reward + new_reward
     }

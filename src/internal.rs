@@ -12,7 +12,8 @@ impl StackingContract {
             unstake_available_epoch: 0,
         };
 
-        self.accounts.insert(&account_id, &account);
+        self.accounts
+            .insert(&account_id, &UpgradeableAccount::from(account));
     }
 
     pub(crate) fn internal_calculate_account_reward(&self, account: &Account) -> Balance {

@@ -34,7 +34,7 @@ pub struct StackingContractV1 {
     pub total_staker: Balance,
     pub pre_reward: Balance,
     pub last_block_balance_change: BlockHeight,
-    pub accounts: LookupMap<AccountId, Account>, //thong tin chi tiet cua account theo accont id
+    pub accounts: LookupMap<AccountId, UpgradeableAccount>, //thong tin chi tiet cua account theo accont id
     pub paused: bool,
     pub pause_in_block: BlockHeight,
     pub new_data: U128,
@@ -51,7 +51,7 @@ pub struct StackingContract {
     pub total_staker: Balance,
     pub pre_reward: Balance,
     pub last_block_balance_change: BlockHeight,
-    pub accounts: LookupMap<AccountId, Account>, //thong tin chi tiet cua account theo accont id
+    pub accounts: LookupMap<AccountId, UpgradeableAccount>, //thong tin chi tiet cua account theo accont id
     pub paused: bool,
     pub pause_in_block: BlockHeight,
     pub new_data: U128,

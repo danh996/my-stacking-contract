@@ -1,6 +1,18 @@
 use near_sdk::Timestamp;
 
 use crate::*;
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub struct AccountV1 {
+    pub stake_balance: Balance,
+    pub pre_reward: Balance,
+    pub last_block_balance_change: BlockHeight,
+    pub unstake_balance: Balance,
+    pub unstake_start_timestamp: Timestamp,
+    pub unstake_available_epoch: EpochHeight,
+    pub new_account_data: U128,
+}
+
 #[derive(BorshSerialize, BorshDeserialize)]
 
 pub struct Account {
@@ -10,6 +22,35 @@ pub struct Account {
     pub unstake_balance: Balance,
     pub unstake_start_timestamp: Timestamp,
     pub unstake_available_epoch: EpochHeight,
+    pub new_account_data: U128,
+}
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum UpgradeableAccount {
+    V1(AccountV1),
+    Current(Account),
+}
+
+impl From<UpgradeableAccount> for Account {
+    fn from(upgradetable_account: UpgradeableAccount) -> Self {
+        match upgradetable_account {
+            UpgradeableAccount::Current(account) => account,
+            UpgradeableAccount::V1(account_v1) => Account {
+                stake_balance: account_v1.stake_balance,
+                pre_reward: account_v1.stake_balance,
+                last_block_balance_change: account_v1.last_block_balance_change,
+                unstake_balance: account_v1.unstake_balance,
+                unstake_start_timestamp: account_v1.unstake_start_timestamp,
+                unstake_available_epoch: account_v1.unstake_available_epoch,
+                new_account_data: U128(0),
+            },
+        }
+    }
+}
+
+impl From<Account> for UpgradeableAccount {
+    fn from(account: Account) -> Self {
+        UpgradeableAccount::Current(account)
+    }
 }
 
 #[derive(Deserialize, Serialize)]
