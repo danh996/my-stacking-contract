@@ -10,15 +10,15 @@ use near_sdk::{
 
 use crate::account::*;
 use crate::config::*;
-use crate::enumeration::*;
-use crate::internal::*;
-use crate::util::*;
+// use crate::enumeration::*;
+// use crate::internal::*;
+// use crate::util::*;
 
 mod account;
 mod config;
-mod enumeration;
-mod internal;
-mod util;
+// mod enumeration;
+// mod internal;
+// mod util;
 
 #[derive(BorshSerialize, BorshDeserialize, BorshStorageKey)]
 pub enum StorageKey {
@@ -65,84 +65,84 @@ impl StackingContract {
         }
     }
 
-    #[payable]
-    pub fn storage_deposit(&mut self, account_id: Option<AccountId>) {
-        assert_at_least_one_yocto();
-        let account = account_id.unwrap_or_else(|| env::predecessor_account_id());
+    // #[payable]
+    // pub fn storage_deposit(&mut self, account_id: Option<AccountId>) {
+    //     assert_at_least_one_yocto();
+    //     let account = account_id.unwrap_or_else(|| env::predecessor_account_id());
 
-        let account_stake = self.accounts.get(&account);
+    //     let account_stake = self.accounts.get(&account);
 
-        if account_stake.is_some() {
-            refund_deposit(0)
-        } else {
-            //tao accoount moiw
-            let before_storage_used = env::storage_usage();
+    //     if account_stake.is_some() {
+    //         refund_deposit(0)
+    //     } else {
+    //         //tao accoount moiw
+    //         let before_storage_used = env::storage_usage();
 
-            self.internal_register_account(account.clone());
+    //         self.internal_register_account(account.clone());
 
-            let after_storage_used = env::storage_usage();
+    //         let after_storage_used = env::storage_usage();
 
-            //refund lai token deposit con lai
+    //         //refund lai token deposit con lai
 
-            refund_deposit(after_storage_used - before_storage_used);
-        }
-    }
+    //         refund_deposit(after_storage_used - before_storage_used);
+    //     }
+    // }
 
-    pub fn storage_balance_of(&self, account_id: AccountId) -> U128 {
-        let account = self.accounts.get(&account_id);
-        if account.is_some() {
-            U128(1)
-        } else {
-            U128(0)
-        }
-    }
+    // pub fn storage_balance_of(&self, account_id: AccountId) -> U128 {
+    //     let account = self.accounts.get(&account_id);
+    //     if account.is_some() {
+    //         U128(1)
+    //     } else {
+    //         U128(0)
+    //     }
+    // }
 
-    pub fn is_paused(&self) -> bool {
-        self.paused
-    }
+    // pub fn is_paused(&self) -> bool {
+    //     self.paused
+    // }
 }
 
-#[cfg(all(test, not(target_arch = "wasm32")))]
+// #[cfg(all(test, not(target_arch = "wasm32")))]
 
-mod tests {
-    use super::*;
-    use near_sdk::test_utils::{accounts, VMContextBuilder};
-    use near_sdk::{testing_env, MockedBlockchain};
+// mod tests {
+//     use super::*;
+//     use near_sdk::test_utils::{accounts, VMContextBuilder};
+//     use near_sdk::{testing_env, MockedBlockchain};
 
-    use crate::StackingContract;
+//     use crate::StackingContract;
 
-    fn get_context(is_view: bool) -> VMContextBuilder {
-        let mut builder: VMContextBuilder = VMContextBuilder::new();
-        builder
-            .current_account_id(accounts(0))
-            .signer_account_id(accounts(0))
-            .predecessor_account_id(accounts(0))
-            .is_view(is_view);
+//     fn get_context(is_view: bool) -> VMContextBuilder {
+//         let mut builder: VMContextBuilder = VMContextBuilder::new();
+//         builder
+//             .current_account_id(accounts(0))
+//             .signer_account_id(accounts(0))
+//             .predecessor_account_id(accounts(0))
+//             .is_view(is_view);
 
-        builder
-    }
+//         builder
+//     }
 
-    #[test]
+//     #[test]
 
-    fn test_init_contract() {
-        let context = get_context(false);
-        testing_env!(context.build());
+//     fn test_init_contract() {
+//         let context = get_context(false);
+//         testing_env!(context.build());
 
-        let config: Config = Config {
-            reward_denumerator: 10,
-            reward_numerator: 100000000,
-        };
+//         let config: Config = Config {
+//             reward_denumerator: 10,
+//             reward_numerator: 100000000,
+//         };
 
-        let contract =
-            StackingContract::new(accounts(1).to_string(), "ft_contract".to_string(), config);
+//         let contract =
+//             StackingContract::new(accounts(1).to_string(), "ft_contract".to_string(), config);
 
-        assert_eq!(contract.owner_id, accounts(1).to_string());
-        assert_eq!(contract.ft_contract_id, "ft_contract".to_string());
-        assert_eq!(
-            config.reward_denumerator,
-            contract.config.reward_denumerator
-        );
-        assert_eq!(config.reward_numerator, contract.config.reward_numerator);
-        assert_eq!(contract.pause, false);
-    }
-}
+//         assert_eq!(contract.owner_id, accounts(1).to_string());
+//         assert_eq!(contract.ft_contract_id, "ft_contract".to_string());
+//         assert_eq!(
+//             config.reward_denumerator,
+//             contract.config.reward_denumerator
+//         );
+//         assert_eq!(config.reward_numerator, contract.config.reward_numerator);
+//         assert_eq!(contract.pause, false);
+//     }
+// }
