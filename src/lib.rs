@@ -43,6 +43,7 @@ pub struct StackingContract {
 #[near_bindgen]
 
 impl StackingContract {
+    #[init]
     pub fn new_default_config(owner_id: AccountId, ft_contract_id: AccountId) -> Self {
         Self::new(owner_id, ft_contract_id, Config::default())
     }
